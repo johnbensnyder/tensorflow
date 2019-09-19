@@ -1569,6 +1569,11 @@ tf_gen_op_wrapper_private_py(
 )
 
 tf_gen_op_wrapper_private_py(
+    name = "roi_align_op_gen",
+    visibility = ["//tensorflow:__subpackages__"],
+)
+
+tf_gen_op_wrapper_private_py(
     name = "audio_ops_gen",
     require_shape_functions = True,
     visibility = [
@@ -2225,6 +2230,7 @@ py_library(
         ":nn",
         ":nn_ops_gen",
         ":random_ops",
+        ":roi_align_op_gen",
         ":string_ops",
         ":util",
         ":variables",
