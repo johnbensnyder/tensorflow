@@ -1032,9 +1032,9 @@ Status NmsGpu2(const float* d_sorted_boxes_float_ptr, const int num_boxes,
   //                             config.thread_per_block, 0, device.stream(),
   //                             config.virtual_thread_count,
   //                             d_nms_mask.flat<int32>().data()));
-  TF_CHECK_OK(SetZero<int><<<config.block_count, config.thread_per_block, 0, 
+  SetZero<int><<<config.block_count, config.thread_per_block, 0, 
   							 device.stream()>>>(config.virtual_thread_count,
-  							 d_nms_mask.flat<int32>().data()));
+  							 d_nms_mask.flat<int32>().data());
 
   AllocatorAttributes alloc_attr;
   alloc_attr.set_on_host(true);
@@ -1063,19 +1063,19 @@ Status NmsGpu2(const float* d_sorted_boxes_float_ptr, const int num_boxes,
      //                              thread_block, 0, device.stream(),
      //                              d_sorted_boxes, num_boxes, iou_threshold,
      //                              bit_mask_len, d_delete_mask));
-      TF_CHECK_OK(NMSKernel<true, false><<<block_dim, thread_block, 0, 
+      NMSKernel<true, false><<<block_dim, thread_block, 0, 
                                   device.stream()>>>(d_sorted_boxes, 
 			 					  num_boxes, iou_threshold,
-                                  bit_mask_len, d_delete_mask));
+                                  bit_mask_len, d_delete_mask);
     } else {
       // TF_CHECK_OK(GpuLaunchKernel(NMSKernel<true, true>, block_dim,
       //                             thread_block, 0, device.stream(),
       //                             d_sorted_boxes, num_boxes, iou_threshold,
       //                             bit_mask_len, d_delete_mask));
-       TF_CHECK_OK(NMSKernel<true, true><<<block_dim, thread_block, 0, 
+       NMSKernel<true, true><<<block_dim, thread_block, 0, 
                                   device.stream()>>>(d_sorted_boxes, 
 			 					  num_boxes, iou_threshold,
-                                  bit_mask_len, d_delete_mask));
+                                  bit_mask_len, d_delete_mask);
     }
   } else {
     if (!legacy_mode) {
@@ -1083,19 +1083,19 @@ Status NmsGpu2(const float* d_sorted_boxes_float_ptr, const int num_boxes,
       //                             thread_block, 0, device.stream(),
       //                             d_sorted_boxes, num_boxes, iou_threshold,
       //                             bit_mask_len, d_delete_mask));
-    	TF_CHECK_OK(NMSKernel<false, false><<<block_dim, thread_block, 0, 
+    	NMSKernel<false, false><<<block_dim, thread_block, 0, 
                                   device.stream()>>>(d_sorted_boxes, 
 			 					  num_boxes, iou_threshold,
-                                  bit_mask_len, d_delete_mask));
+                                  bit_mask_len, d_delete_mask);
     } else {
       // TF_CHECK_OK(GpuLaunchKernel(NMSKernel<false, true>, block_dim,
       //                             thread_block, 0, device.stream(),
       //                             d_sorted_boxes, num_boxes, iou_threshold,
       //                             bit_mask_len, d_delete_mask));
-    	TF_CHECK_OK(NMSKernel<false, true><<<block_dim, thread_block, 0, 
+    	NMSKernel<false, true><<<block_dim, thread_block, 0, 
                                   device.stream()>>>(d_sorted_boxes, 
 			 					  num_boxes, iou_threshold,
-                                  bit_mask_len, d_delete_mask));
+                                  bit_mask_len, d_delete_mask);
     }
   }
   TF_RETURN_IF_CUDA_ERROR(cudaGetLastError());
@@ -1113,17 +1113,17 @@ Status NmsGpu2(const float* d_sorted_boxes_float_ptr, const int num_boxes,
   //                             config.thread_per_block, 0, device.stream(),
   //                             config.virtual_thread_count, 0,
   //                             d_indices.flat<int>().data()));
-  TF_CHECK_OK(Iota<int><<<config.block_count, config.thread_per_block, 0, 
+  Iota<int><<<config.block_count, config.thread_per_block, 0, 
 		                  device.stream()>>>(config.virtual_thread_count, 0,
-                          d_indices.flat<int>().data()));
+                          d_indices.flat<int>().data());
 
   char* selected = (char*)(selected_boxes.flat<int8>().data());
   // TF_CHECK_OK(GpuLaunchKernel(NMSReduce, 1, 1024, bit_mask_len * sizeof(int),
   //                             device.stream(), d_delete_mask, bit_mask_len,
   //                             num_boxes, max_boxes, selected));
-  TF_CHECK_OK(NMSReduce<<<1, 1024, bit_mask_len * sizeof(int),
+  NMSReduce<<<1, 1024, bit_mask_len * sizeof(int),
                               device.stream()>>>(d_delete_mask, bit_mask_len,
-                              num_boxes, max_boxes, selected));
+                              num_boxes, max_boxes, selected);
   TF_RETURN_IF_CUDA_ERROR(cudaGetLastError());
   // do Cub::deviceSelect::flagged
   size_t flagged_buffer_size = 0;
@@ -1542,8 +1542,8 @@ void ResetTensor(Tensor* t, const Eigen::GpuDevice& d) {
   // TF_CHECK_OK(GpuLaunchKernel(
   //     SetZero<T>, zconfig.block_count, zconfig.thread_per_block, 0, d.stream(),
   //     zconfig.virtual_thread_count, (*t).flat<T>().data()));
-  TF_CHECK_OK(SetZero<T><<<zconfig.block_count, zconfig.thread_per_block, 0, 
-              d.stream()>>>(zconfig.virtual_thread_count, (*t).flat<T>().data()));
+  SetZero<T><<<zconfig.block_count, zconfig.thread_per_block, 0, 
+              d.stream()>>>(zconfig.virtual_thread_count, (*t).flat<T>().data());
 }
 
 Status AllocateGenerationTempTensors(
