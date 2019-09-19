@@ -857,12 +857,6 @@ tf_kernel_library(
 )
 
 tf_kernel_library(
-    name = "roi_align_op",
-    prefix = "roi_align_op",
-    deps = IMAGE_DEPS + if_cuda(["@cub_archive//:cub"])
-)
-
-tf_kernel_library(
     name = "shape_ops",
     prefix = "shape_ops",
     deps = ARRAY_DEPS,
@@ -2235,6 +2229,12 @@ tf_kernel_library(
     name = "random_crop_op",
     prefix = "random_crop_op",
     deps = IMAGE_DEPS,
+)
+
+tf_kernel_library(
+    name = "roi_align_op",
+    prefix = "roi_align_op",
+    deps = IMAGE_DEPS + if_cuda(["@cub_archive//:cub"])
 )
 
 tf_kernel_library(
