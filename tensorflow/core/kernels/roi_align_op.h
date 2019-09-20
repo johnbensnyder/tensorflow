@@ -90,3 +90,5 @@ struct GeneratePreNMSUprightBoxes {
 
 }  // namespace functor
 }  // namespace tensorflow
+
+#endif
