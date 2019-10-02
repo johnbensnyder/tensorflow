@@ -1388,7 +1388,7 @@ cc_library(
         ":ragged_ops",
         ":random_ops_op_lib",
         ":rnn_ops_op_lib",
-        "::roi_align_op_op_lib",
+        ":roi_align_op_op_lib",
         ":stateful_random_ops_op_lib",
         ":remote_fused_graph_ops_op_lib",
         ":resource_variable_ops_op_lib",
