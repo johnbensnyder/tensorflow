@@ -1956,7 +1956,7 @@ class GenerateBoundingBoxProposals : public tensorflow::AsyncOpKernel {
     // The following calls to CUB primitives do nothing
     // (because the first arg is nullptr)
     // except setting cub_*_temp_storage_bytes
-    auto cuda_stream = GetCudaStream(context);
+    auto cuda_stream = GetGpuStream(context);
     size_t cub_sort_temp_storage_bytes = 0;
     float* flt_ptr = nullptr;
     int* int_ptr = nullptr;
@@ -2205,7 +2205,7 @@ class GenerateBoundingBoxProposalsV2 : public tensorflow::AsyncOpKernel {
     // The following calls to CUB primitives do nothing
     // (because the first arg is nullptr)
     // except setting cub_*_temp_storage_bytes
-    auto cuda_stream = GetCudaStream(context);
+    auto cuda_stream = GetGpuStream(context);
     size_t cub_sort_temp_storage_bytes = 0;
     float* flt_ptr = nullptr;
     int* int_ptr = nullptr;
