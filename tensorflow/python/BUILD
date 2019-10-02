@@ -2079,7 +2079,7 @@ tf_gen_op_wrapper_private_py(
     visibility = ["//learning/brain/python/ops:__pkg__"],
 )
 
- tf_gen_op_wrapper_private_py(
+tf_gen_op_wrapper_private_py(
     name = "roi_align_op_gen",
     visibility = ["//tensorflow:__subpackages__"],
 )
